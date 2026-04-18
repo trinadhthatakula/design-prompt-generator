@@ -22,10 +22,10 @@ Whether you're looking to migrate a legacy app, hand off existing screens to a d
 
 You can install this skill into your AI coding assistant workspace in two ways:
 
-### Using `openskill` (Recommended)
+### Using `openskills` (Recommended)
 Run the following npx command in your workspace terminal to install directly from this repository:
 ```bash
-npx openskill install trinadhthatakula/design-prompt-generator
+npx openskills install trinadhthatakula/design-prompt-generator
 ```
 
 ### Manual Installation
