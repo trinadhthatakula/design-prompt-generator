@@ -18,14 +18,27 @@ Whether you're looking to migrate a legacy app, hand off existing screens to a d
 - **Multi-Framework**: Agnostic to your tech stack. It works seamlessly out-of-the-box with Jetpack Compose, React, Flutter, and more.
 - **Zero-Jargon Output**: Translates complex framework-specific code/logic into clean, descriptive visual instructions that any designer (or AI designer) can comprehend.
 
+## 📥 Installation
+
+You can install this skill into your AI coding assistant workspace in two ways:
+
+### Using `openskill` (Recommended)
+Run the following npx command in your workspace terminal to install directly from this repository:
+```bash
+npx openskill install trinadhthatakula/design-prompt-generator
+```
+
+### Manual Installation
+1. Create a `skills/design-prompt-generator` directory in your workspace or assistant configuration folder.
+2. Download and copy the `SKILL.md` file from this repository into the newly created directory.
+
 ## 🛠️ How to Use
 
-If using an AI Coding Assistant capable of utilizing skills:
+Once the skill is installed in an AI Coding Assistant capable of utilizing skills:
 
-1. Add this skill to your workspace environment.
-2. Instruct your assistant to: *"Use the `design-prompt-generator` skill on this codebase."*
-3. The AI will traverse your codebase, analyze UI files, and deposit a cleanly structured `DESIGN_PROMPTS.md` at the root of your project.
-4. Open the file, and copy sections sequentially into Google Stitch, Claude Design, or your preferred LLM to visually regenerate or iterate on the designs!
+1. Instruct your assistant to: *"Use the `design-prompt-generator` skill on this codebase."*
+2. The AI will traverse your codebase, analyze UI files, and deposit a cleanly structured `DESIGN_PROMPTS.md` at the root of your project.
+3. Open the file, and copy sections sequentially into Google Stitch, Claude Design, or your preferred LLM to visually regenerate or iterate on the designs!
 
 ## 📦 What Gets Generated?
 
