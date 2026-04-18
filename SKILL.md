@@ -1,6 +1,16 @@
 ---
 name: design-prompt-generator
 description: Use when you have an existing UI codebase (Jetpack Compose, SwiftUI, React, Flutter, etc.) and need to generate a structured design-prompt file to communicate the entire UI to Google Stitch, Claude Design, or any AI design tool. Use when modernizing UI, handing off to a designer, or bootstrapping a redesign from existing screens.
+license: MIT
+metadata:
+  author: trinadhthatakula
+  keywords:
+    - UI/UX
+    - design-system
+    - prompt-engineering
+    - jetpack-compose
+    - react
+    - swiftui
 ---
 
 # Design Prompt Generator
@@ -24,12 +34,26 @@ The output is ready to paste into Google Stitch or Claude Design, one section at
 
 ---
 
+## Objective
+To systematically extract structural UI code and transform it into natural-language design prompts ordered by dependency.
+
+## Summary of Workflow
+1. **Discover**: Locate all UI files across screens, components, and themes.
+2. **Analyze**: Extract components, layout structures, and states per file.
+3. **Build Graph**: Resolve the dependency tree so atomic components come first.
+4. **Write Prompts**: Generate conversational descriptions for each component utilizing the template in `examples/DESIGN_PROMPTS_EXAMPLE.md`.
+5. **Assemble**: Construct the final `DESIGN_PROMPTS.md` file.
+
+---
+
 ## Process
 
 ### Step 1 — Discover
 
 Find every UI file: screens, composables/components, theme files, navigation shell.
 
+You can use the helper script located in `scripts/find_ui_files.sh` to quickly locate these files.
+If running manually, use:
 ```shell
 # Jetpack Compose
 find . -path '*/ui/**/*.kt' -o -path '*/theme/**/*.kt' -o -path '*/navigation/**/*.kt'
@@ -39,6 +63,9 @@ find . -path '*/components/**/*.tsx' -o -path '*/screens/**/*.tsx' -o -path '*/p
 
 # Flutter
 find . -path '*/widgets/**/*.dart' -o -path '*/screens/**/*.dart'
+
+# SwiftUI
+find . -name '*.swift' -path '*/Views/*' -o -path '*/Screens/*' -o -name '*View.swift'
 ```
 
 Group into layers:
@@ -79,24 +106,7 @@ ThemeFoundation
 
 Write one prompt section per component/screen, in dependency order.
 
-**Prompt template:**
-
-```markdown
-### {N}.{M} — `ComponentName`
-> File: `path/to/File.kt` · [private composable | shared component | screen]
-> Uses: `Dep1`, `Dep2`   ← only if it has dependencies
-
-Design a **[one-line description of what this UI element is]**.
-
-[Layout description — top to bottom or primary axis. Be specific about containers,
-spacing, alignment. Name Material components used (Card, TopAppBar, LazyColumn, etc.)]
-
-[State descriptions — what changes visually between loading/empty/error/success states]
-
-[Interaction notes — tap targets, animations, dialogs triggered]
-
-[Color/typography role hints — e.g., "primary color for active item, onSurfaceVariant for labels"]
-```
+**Reference:** Use the structure provided in `examples/DESIGN_PROMPTS_EXAMPLE.md` as your strict template.
 
 **Rules for prompt quality:**
 - Write for a designer who has never seen the code — no Kotlin/Swift jargon
@@ -107,39 +117,13 @@ spacing, alignment. Name Material components used (Card, TopAppBar, LazyColumn, 
 
 ### Step 5 — Assemble `DESIGN_PROMPTS.md`
 
-Structure:
-```
-# [App Name] — Design Prompts for [Tool Name]
-
-> How to use: [one sentence]
-> Design system: [theme name, default mode, palette seed, motion style]
+Structure the final file and write it to the **project root** as `DESIGN_PROMPTS.md`. Be sure to follow the reference structure from the examples directory, ending with a dependency tree.
 
 ---
 
-## 0. Design System Foundation
-### 0.1 — Theme
+## Key Rules & Constraints
 
-## 1. Common / Shared Components
-### 1.1 — ComponentA
-### 1.2 — ComponentB
-
-## 2. [Feature Area] Screen
-### 2.1 — SubComposableX   ← dependency first
-### 2.2 — SubComposableY
-### 2.3 — FeatureScreen    ← screen last, references 2.1 and 2.2
-
-...
-
-## Summary — Dependency Order
-[ASCII or markdown tree showing full composition hierarchy]
-```
-
-Write the file to the **project root** as `DESIGN_PROMPTS.md`.
-
----
-
-## Key Rules
-
+- **CONSTRAINT:** Do not mutate or modify any of the original source code files in the target workspace. You are strictly performing a read-only analysis. 
 - **Dependency order is mandatory.** A screen prompt must never appear before a prompt for a component it uses.
 - **One section = one Stitch/Claude Design conversation turn.** Each section must be self-contained enough to paste in isolation.
 - **Include the theme section first.** Design tools need the design system context before individual components.
